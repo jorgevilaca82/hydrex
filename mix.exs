@@ -6,6 +6,11 @@ defmodule Hydrex.MixProject do
       app: :hydrex,
       version: "0.1.0",
       elixir: "~> 1.18",
+      description: "Hydrex is a library for hydrating Ecto structs with virtual fields.",
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/jorgevilaca82/hydrex"
+      },
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
