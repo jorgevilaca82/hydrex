@@ -26,7 +26,7 @@ end
 And when calling you can pass an opts list informing whether or not you want your ecto models hydrated.
 
 ```elixir
-import HelloWeb.Hydratable.Utils, only: [maybe_hydrate: 2]
+import Hydrex.Hydratable.Utils, only: [maybe_hydrate: 2]
 
 Repo.all(Url) |> maybe_hydrate(hydrate: true)
 ```
