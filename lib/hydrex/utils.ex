@@ -14,9 +14,16 @@ defmodule Hydrex.Hydratable.Utils do
   def maybe_hydrate(data, opts) when is_list(opts) do
     hydrate = Keyword.get(opts, :hydrate, false)
 
-    case hydrate do
-      true -> Hydratable.hydrate(data)
-      false -> data
+    do_hydrate(data, hydrate)
+  end
+
+  defp do_hydrate(data, true), do: Hydratable.hydrate(data)
+  defp do_hydrate(data, false), do: data
+
+  defp do_hydrate(data, virtual_fields) when is_list(virtual_fields) do
+    case virtual_fields do
+      [] -> data
+      _ -> Hydratable.hydrate(data, virtual_fields)
     end
   end
 end
