@@ -1,8 +1,41 @@
 defprotocol Hydrex.Hydratable do
+  @moduledoc """
+  A protocol for hydrating Ecto structs with virtual fields.
+  """
+
   @doc """
   Hydrates an Ecto struct or a list of structs.
+
+  ## Parameters
+  - `data`: The Ecto struct or a list of structs to hydrate.
+  - `virtual_fields`: A list of virtual fields to hydrate. If empty or omitted, all virtual fields will be hydrated.
+
+  ## Examples
+
+      iex> defmodule User do
+      ...>   use Ecto.Schema
+      ...>   embedded_schema do
+      ...>     field :name, :string
+      ...>     field :age, :integer
+      ...>     field :greeting, :string, virtual: true
+      ...>   end
+      ...>   def greeting(%User{name: name}), do: "Hello, \#{name}!"
+      ...> end
+      iex> user = %User{name: "Alice", age: 30}
+      iex> Hydrex.Hydratable.hydrate(user, [:greeting])
+      # or `Hydrex.Hydratable.hydrate(user, [])` in order to hydrate all virtual fields
+      # or simply: `Hydrex.Hydratable.hydrate(user)`
+      %User{name: "Alice", age: 30, greeting: "Hello, Alice!"}
+
+      iex> users = [%User{name: "Bob"}, %User{name: "Carol"}]
+      iex> Hydrex.Hydratable.hydrate(users, [:greeting])
+      [
+        %User{name: "Bob", age: nil, greeting: "Hello, Bob!"},
+        %User{name: "Carol", age: nil, greeting: "Hello, Carol!"}
+      ]
   """
   @fallback_to_any true
+  @spec hydrate(any(), list(atom())) :: any()
   def hydrate(data, virtual_fields \\ [])
 end
 
